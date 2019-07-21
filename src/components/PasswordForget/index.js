@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, {Component} from 'react';
+import {Link} from 'react-router-dom';
 
-import { withFirebase } from '../Firebase';
+import {withFirebase} from '../Firebase';
 import * as ROUTES from '../../constants/routes';
 import {MDBBtn, MDBCol, MDBContainer, MDBRow} from "mdbreact";
 
 const PasswordForgetPage = () => (
     <div>
         <h1>PasswordForget</h1>
-        <PasswordForgetForm />
+        <PasswordForgetForm/>
     </div>
 );
 
@@ -21,64 +21,64 @@ class PasswordForgetFormBase extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...INITIAL_STATE };
+        this.state = {...INITIAL_STATE};
     }
 
     onSubmit = event => {
-        const { email } = this.state;
+        const {email} = this.state;
 
         this.props.firebase
             .doPasswordReset(email)
             .then(() => {
-                this.setState({ ...INITIAL_STATE });
+                this.setState({...INITIAL_STATE});
             })
             .catch(error => {
-                this.setState({ error });
+                this.setState({error});
             });
 
         event.preventDefault();
     };
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     render() {
-        const { email, error } = this.state;
+        const {email, error} = this.state;
 
         return (
-                <MDBContainer>
-                    <MDBRow>
-                        <MDBCol md="6">
-                            <form onSubmit={this.onSubmit}>
-                                <p className="h4 text-center mb-4">Update personal information</p>
-                                <label htmlFor="email2" className="grey-text">
-                                    New password
-                                </label>
-                                <input
-                                    id="email2"
-                                    className="form-control"
+            <MDBContainer>
+                <MDBRow>
+                    <MDBCol md="6">
+                        <form onSubmit={this.onSubmit}>
+                            <p className="h4 text-center mb-4">Update personal information</p>
+                            <label htmlFor="email2" className="grey-text">
+                                New password
+                            </label>
+                            <input
+                                id="email2"
+                                className="form-control"
 
-                                    name="email"
-                                    value={email}
-                                    onChange={this.onChange}
-                                    type="text"
-                                    placeholder="Email Address"
-                                />
-                                <br />
+                                name="email"
+                                value={email}
+                                onChange={this.onChange}
+                                type="text"
+                                placeholder="Email Address"
+                            />
+                            <br/>
 
-                                <div className="text-center mt-4">
-                                    <MDBBtn color="unique" type="submit">
-                                        Reset My Password
-                                    </MDBBtn>
-                                </div>
-                                {error && <p>{error.message}</p>}
+                            <div className="text-center mt-4">
+                                <MDBBtn color="unique" type="submit">
+                                    Reset My Password
+                                </MDBBtn>
+                            </div>
+                            {error && <p>{error.message}</p>}
 
 
-                            </form>
-                        </MDBCol>
-                    </MDBRow>
-                </MDBContainer>
+                        </form>
+                    </MDBCol>
+                </MDBRow>
+            </MDBContainer>
 
 
         );
@@ -95,4 +95,4 @@ export default PasswordForgetPage;
 
 const PasswordForgetForm = withFirebase(PasswordForgetFormBase);
 
-export { PasswordForgetForm, PasswordForgetLink };
+export {PasswordForgetForm, PasswordForgetLink};

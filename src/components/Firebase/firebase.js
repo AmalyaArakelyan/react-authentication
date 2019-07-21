@@ -59,8 +59,6 @@ class Firebase {
                 .then(function (userCredential) {
                     userCredential.user.updateEmail('user.email')
                 })
-
-            debugger;
             currentUser.updateEmail(user.email).then(function () {
                 // Update successful.
             }).catch(function (error) {
@@ -113,51 +111,36 @@ class Firebase {
 
     doPasswordUpdate = (password, passwordOne) => {
         let currentUser = this.auth.currentUser;
-        debugger;
         return this.auth.signInWithEmailAndPassword(currentUser.email, password)
             .then(function (userCredential) {
-                debugger;
                 userCredential.user.updatePassword(passwordOne);
             });
     };
 
-
-    // *** User API ***
-
     addPhoto = (file) => {
-
-
-// Create a reference to 'mountains.jpg'
-//         let mountainsRef = this.storage.child('mountains.jpg');
-//
-// // Create a reference to 'images/mountains.jpg'
-//         ;
-//         console.log(mountainsRef);
-//         console.log(mountainImagesRef);
-
-        // Create file metadata including the content type
+        let currentUser = this.auth.currentUser;
         let metadata = {
             contentType: 'image/jpeg',
         };
-        let i, images = [];
-// Upload the file and metadata
-        for (i = 0; i < file.length; i++) {
-            debugger;
-            let name = file[i].name;
-            this.storage.child(`images/${name}`).put(file[i], metadata);
-            let mountainImagesRef = this.storage.child(`images/${name}`);
-            mountainImagesRef.getDownloadURL().then(function (url) {
-                images.push(url);
-            }).catch(function (error) {
 
-            });
-        }
+        let name = file.name;
+        this.storage.child(`images/${name}`).put(file, metadata);
+        let mountainImagesRef = this.storage.child(`images/${name}`);
+        return mountainImagesRef.getDownloadURL().then(url => {
+            let image ={
+                url: url,
+                name: file.name,
+                uid: currentUser.uid
+            }
+            this.db.ref('images/' + currentUser.uid).set(image);
+            return image;
+        }).catch(error =>{
 
-        return images;
+        });
+
     };
 
     addProfileImage = (file) => {
-        debugger;
         let currentUser = this.auth.currentUser;
 
         let metadata = {
@@ -176,27 +159,13 @@ class Firebase {
 
         });
     }
-    getImages = () => {
-        debugger;
-        let currentUser = this.auth.currentUser;
-        let ImageList = this.storage.child(`files/${currentUser.uid}`);
-        return ImageList.listAll();
-
-
-    };
 
     user = uid => this.db.ref(`users/${uid}`);
 
     users = () => this.db.ref('users');
 
+    images = () => this.db.ref(`images`);
 
-//     service firebase.storage {
-//     match /b/{bucket}/o {
-// match /{allPaths=**} {
-//     allow read, write: if request.auth != null;
-// }
-// }
-// }
 }
 
 export default Firebase;

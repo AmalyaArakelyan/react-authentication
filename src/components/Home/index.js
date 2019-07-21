@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { MDBTable, MDBTableBody, MDBTableHead } from 'mdbreact';
+import React, {Component} from 'react';
+import {MDBTable, MDBTableBody, MDBTableHead} from 'mdbreact';
 
-import { AuthUserContext, withAuthorization } from '../Session';
+import {AuthUserContext, withAuthorization} from '../Session';
 
 class HomePage extends Component {
     constructor(props) {
@@ -9,30 +9,22 @@ class HomePage extends Component {
 
         this.state = {
             loading: false,
-            user:[],
+            user: [],
             users: []
         };
     }
 
-    componentDidMount()
-    {
+    componentDidMount() {
         this.getUser();
 
     }
-    componentWillReceiveProps(){
-        {console.log(this.state.user)}
-    }
-    // componentWillUpdate(){
-    //     if(this.state.user.length!==0){
-    //         this.getUser();
-    //     }
-    //
-    //
-    // }
-    getUser(){
-        let currentUser=this.props.firebase.auth.currentUser;
 
-        this.setState({loading: true, user:currentUser});
+
+
+    getUser() {
+        let currentUser = this.props.firebase.auth.currentUser;
+
+        this.setState({loading: true, user: currentUser});
         this.props.firebase.users().on('value', snapshot => {
             const usersObject = snapshot.val();
 
@@ -53,7 +45,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { user, users, loading } = this.state;
+        const {user, users, loading} = this.state;
         return (
             <AuthUserContext.Consumer>
                 {authUser => (
@@ -67,7 +59,7 @@ class HomePage extends Component {
                         <h1>All users</h1>
                         {loading && <div>Loading ...</div>}
 
-                        <UserList users={users} />
+                        <UserList users={users}/>
                     </div>
                 )}
             </AuthUserContext.Consumer>
@@ -75,7 +67,7 @@ class HomePage extends Component {
     }
 }
 
-const UserList = ({ users }) => (
+const UserList = ({users}) => (
     <MDBTable>
         <MDBTableHead color="primary-color" textWhite>
             <tr>
@@ -93,14 +85,9 @@ const UserList = ({ users }) => (
                 </tr>
 
             ))}
-
         </MDBTableBody>
     </MDBTable>
-
 );
-
-
-
 
 const condition = authUser => !!authUser;
 

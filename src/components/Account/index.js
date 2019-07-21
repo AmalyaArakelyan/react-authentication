@@ -1,14 +1,24 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn, MDBTabPane, MDBTabContent, MDBNav, MDBNavItem, MDBNavLink, MDBIcon  } from 'mdbreact';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
+import {compose} from 'recompose';
+import {withFirebase} from '../Firebase';
+import {
+    MDBContainer,
+    MDBRow,
+    MDBCol,
+    MDBBtn,
+    MDBTabPane,
+    MDBTabContent,
+    MDBNav,
+    MDBNavItem,
+    MDBNavLink,
+    MDBIcon
+} from 'mdbreact';
 
-import { AuthUserContext, withAuthorization } from '../Session';
-import { PasswordForgetForm } from '../PasswordForget';
+import {AuthUserContext, withAuthorization} from '../Session';
 import PasswordChangeForm from '../PasswordChange';
 
-class AccountPage extends Component{
+class AccountPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -29,48 +39,49 @@ class AccountPage extends Component{
         return (
             <AuthUserContext.Consumer>
                 {authUser => (
-            <MDBContainer>
-                <MDBNav tabs color="default-color">
-                    <MDBNavItem>
-                        <MDBNavLink
-                            to="#"
-                            className={this.state.activeItem === "1" ? "active teal-text" : "cyan-text"}
-                            onClick={this.toggle("1")}
-                            role="tab"
-                        >
-                            <MDBIcon icon="user" /> Update Information
-                        </MDBNavLink>
-                    </MDBNavItem>
-                    <MDBNavItem>
-                        <MDBNavLink
-                            to="#"
-                            className={this.state.activeItem === "3" ? "active teal-text" : "cyan-text"}
-                            onClick={this.toggle("3")}
-                            role="tab"
-                        >
-                            <MDBIcon icon="envelope" /> change Password
-                        </MDBNavLink>
-                    </MDBNavItem>
+                    <MDBContainer>
+                        <MDBNav tabs color="default-color">
+                            <MDBNavItem>
+                                <MDBNavLink
+                                    to="#"
+                                    className={this.state.activeItem === "1" ? "active teal-text" : "cyan-text"}
+                                    onClick={this.toggle("1")}
+                                    role="tab"
+                                >
+                                    <MDBIcon icon="user"/> Update Information
+                                </MDBNavLink>
+                            </MDBNavItem>
+                            <MDBNavItem>
+                                <MDBNavLink
+                                    to="#"
+                                    className={this.state.activeItem === "3" ? "active teal-text" : "cyan-text"}
+                                    onClick={this.toggle("3")}
+                                    role="tab"
+                                >
+                                    <MDBIcon icon="envelope"/> change Password
+                                </MDBNavLink>
+                            </MDBNavItem>
 
-                </MDBNav>
-                <MDBTabContent
-                    className="card"
-                    activeItem={this.state.activeItem}
-                >
-                    <MDBTabPane tabId="1" role="tabpanel">
-                        <UpdateForm />
-                    </MDBTabPane>
-                    <MDBTabPane tabId="3" role="tabpanel">
-                        <PasswordChangeForm/>
-                    </MDBTabPane>
+                        </MDBNav>
+                        <MDBTabContent
+                            className="card"
+                            activeItem={this.state.activeItem}
+                        >
+                            <MDBTabPane tabId="1" role="tabpanel">
+                                <UpdateForm/>
+                            </MDBTabPane>
+                            <MDBTabPane tabId="3" role="tabpanel">
+                                <PasswordChangeForm/>
+                            </MDBTabPane>
 
-                </MDBTabContent>
-            </MDBContainer>
-                    )}
+                        </MDBTabContent>
+                    </MDBContainer>
+                )}
             </AuthUserContext.Consumer>
         );
     }
 }
+
 // const AccountPage = () => (
 //     <AuthUserContext.Consumer>
 //         {authUser => (
@@ -83,12 +94,11 @@ class AccountPage extends Component{
 // );
 
 
-
 const INITIAL_STATE = {
     username: '',
     email: '',
-    phoneNumber:'',
-    photoURL:'',
+    phoneNumber: '',
+    photoURL: '',
     passwordOne: '',
     passwordTwo: '',
     error: null,
@@ -97,61 +107,57 @@ const INITIAL_STATE = {
 class UpdateFormBase extends Component {
     constructor(props) {
         super(props);
-        this.state = { ...INITIAL_STATE };
+        this.state = {...INITIAL_STATE};
     }
 
-    componentWillMount(){
-         this.props.firebase.getUser().then(data => {
-            console.log(data, 'data')
-            this.setState({
+    componentWillMount() {
+        this.props.firebase.getUser().then(data => {
+             this.setState({
                 username: data.username,
                 email: data.email,
-                phoneNumber:data.phone,
+                phoneNumber: data.phone,
             })
-        }).catch(function(error) {
+        }).catch(function (error) {
             // An error happened.
         });
-        let currentUser=this.props.firebase.auth.currentUser;
+        let currentUser = this.props.firebase.auth.currentUser;
         this.setState({
             username: currentUser.username,
             email: currentUser.email,
-            photoURL:currentUser.photoURL,
+            photoURL: currentUser.photoURL,
         })
     }
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
 
     }
 
     onSubmit = event => {
-        const { username,phoneNumber, photoURL, email, } = this.state;
+        const {username, phoneNumber, photoURL, email,} = this.state;
 
         event.preventDefault();
-                this.props.firebase.updateUser({
-                    username,
-                    email,
-                    phoneNumber,
-                    photoURL
-                })
-
+        this.props.firebase.updateUser({
+            username,
+            email,
+            phoneNumber,
+            photoURL
+        })
 
 
     };
     AddProfileImage = event => {
         this.props.firebase.addProfileImage(event.target.files).then(url => {
-            debugger;
-            this.setState({photoURL:url})
+            this.setState({photoURL: url})
             return url;
         }).catch(function (error) {
 
         })
 
 
-
     };
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     render() {
@@ -164,7 +170,6 @@ class UpdateFormBase extends Component {
             error,
         } = this.state;
 
-        console.log(photoURL);
         return (
 
             <MDBContainer>
@@ -184,11 +189,11 @@ class UpdateFormBase extends Component {
                                 onChange={this.AddProfileImage}
                                 placeholder="Full Name"
                             />
-                            <br />
+                            <br/>
                             <div>
                                 <img src={photoURL} alt='' width={150}/>
                             </div>
-                            <br />
+                            <br/>
                             <label htmlFor="name" className="grey-text">
                                 Your name
                             </label>
@@ -202,7 +207,7 @@ class UpdateFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Full Name"
                             />
-                            <br />
+                            <br/>
                             <label
                                 htmlFor="phone"
                                 className="grey-text"
@@ -218,7 +223,7 @@ class UpdateFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Phone Number"
                             />
-                            <br />
+                            <br/>
                             <label
                                 htmlFor="email1"
                                 className="grey-text"
@@ -234,7 +239,7 @@ class UpdateFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Email Address"
                             />
-                            <br />
+                            <br/>
 
                             <div className="text-center mt-4">
                                 <MDBBtn color="unique" type="submit">

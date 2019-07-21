@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
+import React, {Component} from 'react';
+import {Link, withRouter} from 'react-router-dom';
+import {compose} from 'recompose';
+import {withFirebase} from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import {MDBContainer, MDBRow, MDBCol, MDBBtn} from 'mdbreact';
 
 const SignUpPage = () => (
     <div>
-        <SignUpForm />
+        <SignUpForm/>
     </div>
 );
-
 
 
 const INITIAL_STATE = {
     username: '',
     email: '',
-    phoneNumber:'',
-    photoURL:'',
+    phoneNumber: '',
+    photoURL: '',
     passwordOne: '',
     passwordTwo: '',
     error: null,
@@ -26,23 +25,22 @@ const INITIAL_STATE = {
 class SignUpFormBase extends Component {
     constructor(props) {
         super(props);
-        this.state = { ...INITIAL_STATE };
+        this.state = {...INITIAL_STATE};
     }
 
     onSubmit = event => {
-        const { username,phoneNumber, photoURL, email, passwordOne } = this.state;
+        const {username, phoneNumber, photoURL, email, passwordOne} = this.state;
 
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
             .then(authUser => {
                 // Create a user in your Firebase realtime database
-                debugger;
                 this.props.firebase.createUser({
                     username,
                     email,
                     phoneNumber,
                     photoURL,
-                    uid :authUser.user.uid
+                    uid: authUser.user.uid
 
                 });
                 this.props.firebase.updateUser({
@@ -53,18 +51,18 @@ class SignUpFormBase extends Component {
                 });
             })
             .then(() => {
-                this.setState({ ...INITIAL_STATE });
+                this.setState({...INITIAL_STATE});
                 this.props.history.push(ROUTES.HOME);
             })
             .catch(error => {
-                this.setState({ error });
+                this.setState({error});
             });
 
         event.preventDefault();
     };
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     render() {
@@ -77,12 +75,6 @@ class SignUpFormBase extends Component {
             passwordTwo,
             error,
         } = this.state;
-
-        const isInvalid =
-            passwordOne !== passwordTwo ||
-            passwordOne === '' || phoneNumber === '' ||
-            email === '' ||
-            username === '';
 
         return (
             <MDBContainer>
@@ -106,7 +98,7 @@ class SignUpFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Email Address"
                             />
-                            <br />
+                            <br/>
                             <label htmlFor="name" className="grey-text">
                                 Your name
                             </label>
@@ -119,7 +111,7 @@ class SignUpFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Full Name"
                             />
-                            <br />
+                            <br/>
                             <label
                                 htmlFor="number"
                                 className="grey-text"
@@ -135,7 +127,7 @@ class SignUpFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Phone number"
                             />
-                            <br />
+                            <br/>
                             <label
                                 htmlFor="password"
                                 className="grey-text"
@@ -195,4 +187,4 @@ const SignUpForm = compose(
 
 export default SignUpPage;
 
-export { SignUpForm, SignUpLink };
+export {SignUpForm, SignUpLink};

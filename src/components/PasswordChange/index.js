@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { withFirebase } from '../Firebase';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import {withFirebase} from '../Firebase';
+import {MDBContainer, MDBRow, MDBCol, MDBBtn} from 'mdbreact';
 
 
 const INITIAL_STATE = {
-    password:'',
+    password: '',
     passwordOne: '',
     passwordTwo: '',
     error: null,
@@ -15,31 +15,31 @@ class PasswordChangeForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...INITIAL_STATE };
+        this.state = {...INITIAL_STATE};
     }
 
     onSubmit = event => {
         event.preventDefault();
-        const { password, passwordOne } = this.state;
+        const {password, passwordOne} = this.state;
 
         this.props.firebase
             .doPasswordUpdate(password, passwordOne)
             .then(() => {
-                this.setState({ ...INITIAL_STATE });
+                this.setState({...INITIAL_STATE});
             })
             .catch(error => {
-                this.setState({ error });
+                this.setState({error});
             });
 
 
     };
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     render() {
-        const {password, passwordOne, passwordTwo, error } = this.state;
+        const {password, passwordOne, passwordTwo, error} = this.state;
 
         return (
             <MDBContainer>
@@ -59,9 +59,9 @@ class PasswordChangeForm extends Component {
                                 type="password"
                                 placeholder="Password"
                             />
-                            <br />
+                            <br/>
                             <label htmlFor="password1" className="grey-text">
-                               New password
+                                New password
                             </label>
                             <input
                                 id="password1"
@@ -72,7 +72,7 @@ class PasswordChangeForm extends Component {
                                 type="password"
                                 placeholder="New Password"
                             />
-                            <br />
+                            <br/>
                             <label
                                 htmlFor="passwordTwo1"
                                 className="grey-text"
@@ -88,7 +88,7 @@ class PasswordChangeForm extends Component {
                                 type="password"
                                 placeholder="Confirm password"
                             />
-                            <br />
+                            <br/>
 
                             <div className="text-center mt-4">
                                 <MDBBtn color="unique" type="submit">

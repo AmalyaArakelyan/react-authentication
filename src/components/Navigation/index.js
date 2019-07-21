@@ -23,7 +23,7 @@ const NavigationAuth = () => (
         <MDBNavbarBrand>
             <strong className="white-text">React Autentication</strong>
         </MDBNavbarBrand>
-        <MDBNavbarToggler />
+        <MDBNavbarToggler/>
         <MDBCollapse id="navbarCollapse3" navbar>
             <MDBNavbarNav left>
                 <MDBNavItem active>
@@ -33,7 +33,7 @@ const NavigationAuth = () => (
                     <MDBNavLink to={ROUTES.ACCOUNT}>Edit Personal Date</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
-                    <MDBNavLink to={ROUTES.ADMIN}>Add Photo</MDBNavLink>
+                    <MDBNavLink to={ROUTES.ADD_PHOTO}>Add Photo</MDBNavLink>
                 </MDBNavItem>
                 <MDBNavItem>
                     <SignOutButton/>
@@ -51,8 +51,8 @@ const NavigationNonAuth = () => (
         <MDBNavbarBrand>
             <strong className="white-text">React Autentication</strong>
         </MDBNavbarBrand>
-        <MDBNavbarToggler />
-        <MDBCollapse id="navbarCollapse3"  navbar>
+        <MDBNavbarToggler/>
+        <MDBCollapse id="navbarCollapse3" navbar>
             <MDBNavbarNav left>
                 <MDBNavItem active>
                     <MDBNavLink to={ROUTES.SIGN_IN}>Sign In</MDBNavLink>

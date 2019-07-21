@@ -37,8 +37,7 @@ class AddPhotoPage extends Component {
 }
 
 const INITIAL_STATE = {
-    photo: '',
-    files:'',
+    images: [],
     error: null,
 };
 
@@ -49,18 +48,7 @@ class AddPhotoBase extends Component {
     }
 
     componentWillMount() {
-         this.props.firebase.getUser().then(data => {
-            console.log(data, 'data')
-            this.setState({
-                username: data.username,
-                email: data.email,
-                phoneNumber: data.phone,
-            })
-        }).catch(function (error) {
-            // An error happened.
-        });
-        ;
-
+        this.getImages()
 
     }
 
@@ -68,59 +56,69 @@ class AddPhotoBase extends Component {
 
     }
 
-    onSubmit = event => {
-        const {username, phoneNumber, photoURL, email,} = this.state;
+    getImages = () => {
 
-        event.preventDefault();
-        this.props.firebase.updateUser({
-            username,
-            email,
-            phoneNumber,
-            photoURL
-        })
-    };
+        this.props.firebase.images().on('value', snapshot => {
+            const imagesObject = snapshot.val();
+
+            const imageList = Object.keys(imagesObject).map(key => ({
+                ...imagesObject[key],
+                uid: key,
+            }));
+
+            this.setState({
+                images: imageList,
+                loading: false,
+            });
+        });
+    }
 
     onChange = file => {
-        this.setState({file:file});
-        this.props.firebase.addPhoto(file)
-        //     .then(file =>{
-        //     console.log(file)
-        // });
-        // this.props.firebase.getImages().then(file =>{
-        //     console.log(file)
-        // });
+
+        let i, images = [];
+        for (i = 0; i < file.length; i++) {
+            this.props.firebase.addPhoto(file[i]).then(data => {
+                images.push(data);
+                this.setState({images: images})
+
+            })
+        }
+
+
     };
 
     render() {
-
         const {
+            images,
             error,
         } = this.state;
 
 
         return (
             <React.Fragment>
-            <Dropzone onDrop={acceptedFiles => this.onChange(acceptedFiles)}>
-                {({getRootProps, getInputProps}) => (
-                    <section>
-                        <div {...getRootProps()} className='dropzone'>
-                            <input {...getInputProps()} />
-                            <p className='pt-3'>Click to select files</p>
-                        </div>
-                    </section>
-                )}
-            </Dropzone>
+                <Dropzone onDrop={acceptedFiles => this.onChange(acceptedFiles)}>
+                    {({getRootProps, getInputProps}) => (
+                        <section>
+                            <div {...getRootProps()} className='dropzone'>
+                                <input {...getInputProps()} />
+                                <p className='pt-3'>Click to select files</p>
+                            </div>
+                        </section>
+                    )}
+                </Dropzone>
                 {error && <p>{error.message}</p>}
-            <div>
+                <MDBContainer >
+                    <div className='row'>
+                    {
 
-                {
-                    this.state.files.length>0 && this.state.files.map(file => {
-                        return <MDBContainer>
-                            <img src={file} alt=''/>
-                        </MDBContainer>
-                    })
-                }
-            </div>
+                        images.length > 0 && images.map((image, i) => {
+                            return <div className='col-2' key={i}>
+                                <img src={image.url} alt={image.name}/>
+                            </div>
+                        })
+                    }
+                    </div>
+                </MDBContainer>
             </React.Fragment>
         );
     }

@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router-dom';
+import {compose} from 'recompose';
 
-import { SignUpLink } from '../SignUp';
-import { PasswordForgetLink } from '../PasswordForget';
-import { withFirebase } from '../Firebase';
+import {SignUpLink} from '../SignUp';
+import {PasswordForgetLink} from '../PasswordForget';
+import {withFirebase} from '../Firebase';
 import * as ROUTES from '../../constants/routes';
-import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import {MDBContainer, MDBRow, MDBCol, MDBBtn} from 'mdbreact';
 
 
 const SignInPage = () => (
     <div>
-        <SignInForm />
-        <PasswordForgetLink />
-        <SignUpLink />
+        <SignInForm/>
+        <PasswordForgetLink/>
+        <SignUpLink/>
     </div>
 );
 
@@ -27,35 +27,33 @@ class SignInFormBase extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { ...INITIAL_STATE };
+        this.state = {...INITIAL_STATE};
     }
 
     onSubmit = event => {
         event.preventDefault();
-        const { email, password } = this.state;
+        const {email, password} = this.state;
 
         this.props.firebase
             .doSignInWithEmailAndPassword(email, password)
             .then((data) => {
-                this.setState({ ...INITIAL_STATE });
+                this.setState({...INITIAL_STATE});
                 this.props.history.push(ROUTES.HOME);
-
-                const user = data.user;
 
             })
             .catch(error => {
-                this.setState({ error });
+                this.setState({error});
             });
 
 
     };
 
     onChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
+        this.setState({[event.target.name]: event.target.value});
     };
 
     render() {
-        const { email, password, error } = this.state;
+        const {email, password, error} = this.state;
 
         const isInvalid = password === '' || email === '';
 
@@ -77,7 +75,7 @@ class SignInFormBase extends Component {
                                 onChange={this.onChange}
                                 placeholder="Email Address"
                             />
-                            <br />
+                            <br/>
                             <label htmlFor="password2" className="grey-text">
                                 Your password
                             </label>
@@ -91,7 +89,7 @@ class SignInFormBase extends Component {
                                 placeholder="Password"
                             />
                             <div className="text-center mt-4">
-                                <MDBBtn disabled={isInvalid}  color="indigo" type="submit">Login</MDBBtn>
+                                <MDBBtn disabled={isInvalid} color="indigo" type="submit">Login</MDBBtn>
                             </div>
                             {error && <p>{error.message}</p>}
                         </form>
@@ -109,4 +107,4 @@ const SignInForm = compose(
 
 export default SignInPage;
 
-export { SignInForm };
+export {SignInForm};
