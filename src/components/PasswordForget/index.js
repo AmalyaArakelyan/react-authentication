@@ -7,7 +7,6 @@ import {MDBBtn, MDBCol, MDBContainer, MDBRow} from "mdbreact";
 
 const PasswordForgetPage = () => (
     <div>
-        <h1>PasswordForget</h1>
         <PasswordForgetForm/>
     </div>
 );
@@ -51,7 +50,7 @@ class PasswordForgetFormBase extends Component {
                 <MDBRow>
                     <MDBCol md="6">
                         <form onSubmit={this.onSubmit}>
-                            <p className="h4 text-center mb-4">Update personal information</p>
+                            <h1>PasswordForget</h1>
                             <label htmlFor="email2" className="grey-text">
                                 New password
                             </label>
@@ -86,9 +85,11 @@ class PasswordForgetFormBase extends Component {
 }
 
 const PasswordForgetLink = () => (
-    <p>
-        <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
-    </p>
+    <MDBContainer>
+        <p>
+            <Link to={ROUTES.PASSWORD_FORGET}>Forgot Password?</Link>
+        </p>
+    </MDBContainer>
 );
 
 export default PasswordForgetPage;

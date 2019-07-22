@@ -32,9 +32,9 @@ const NavigationAuth = () => (
                 <MDBNavItem>
                     <MDBNavLink to={ROUTES.ACCOUNT}>Edit Personal Date</MDBNavLink>
                 </MDBNavItem>
-                <MDBNavItem>
-                    <MDBNavLink to={ROUTES.ADD_PHOTO}>Add Photo</MDBNavLink>
-                </MDBNavItem>
+                {/*<MDBNavItem>*/}
+                    {/*<MDBNavLink to={ROUTES.ADD_PHOTO}>Add Photo</MDBNavLink>*/}
+                {/*</MDBNavItem>*/}
                 <MDBNavItem>
                     <SignOutButton/>
                 </MDBNavItem>
